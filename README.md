@@ -1,16 +1,102 @@
-# ecommerce_app
+# 🛍️ Ecommerce App
 
-A new Flutter project.
+A Flutter e-commerce app built with **BLoC** state management, clean feature-based architecture, and a premium dark/light theme system.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🗂️ Folder Structure
 
-A few resources to get you started if this is your first Flutter project:
+```
+lib/
+├── main.dart
+├── app.dart
+│
+├── core/
+│   ├── constants/
+│   ├── storage/
+│   └── theme/
+│       ├── app_colors.dart
+│       ├── app_theme.dart
+│       └── theme_cubit.dart
+│
+├── features/
+│   ├── auth/
+│   │   ├── data/
+│   │   │   ├── services/
+│   │   │   └── repositories/
+│   │   └── presentation/
+│   │       ├── bloc/
+│   │       └── pages/
+│   │
+│   ├── home/
+│   │   ├── data/
+│   │   │   ├── models/
+│   │   │   ├── services/
+│   │   │   └── repositories/
+│   │   └── presentation/
+│   │       ├── bloc/
+│   │       ├── pages/
+│   │       └── widgets/
+│   │
+│   └── favorites/
+│       ├── data/
+│       │   └── repositories/
+│       └── presentation/
+│           ├── bloc/
+│           └── pages/
+│
+└── shared/
+    ├── routes/
+    └── widgets/
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🧠 BLoC Architecture
+
+```
+UI (Page/Widget)
+    │
+    │  dispatches Event
+    ▼
+  Bloc
+    │  calls
+    ▼
+Repository
+    │  calls
+    ▼
+Service (API / Hive)
+    │
+    ▼
+  State  ──► UI rebuilds via BlocBuilder
+```
+
+### BLoCs
+
+| BLoC | Events | States | Purpose |
+|---|---|---|---|
+| `AuthBloc` | `LoginRequested` | `initial`, `loading`, `success`, `failure` | Login flow |
+| `HomeBloc` | `FetchProducts` | `initial`, `loading`, `loaded`, `error` | Load product list |
+| `FavoritesBloc` | `LoadFavorites`, `ToggleFavorite` | `initial`, `loaded` | Manage favorites |
+| `ThemeCubit` | `toggleTheme()` | `ThemeMode` | Light/dark mode |
+
+States are immutable, generated with `freezed`, and pattern-matched in the UI via `state.when(...)`.
+
+---
+
+## 🎨 Theme System
+
+- `AppColors` — color palette for light and dark modes
+- `AppTheme` — builds `ThemeData` from `AppColors`
+- `ThemeCubit` — toggles mode and persists it to Hive
+- `app.dart` — `BlocBuilder<ThemeCubit, ThemeMode>` rebuilds the app on every toggle
+
+---
+
+## 🚀 Getting Started
+
+```bash
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter run
+```
