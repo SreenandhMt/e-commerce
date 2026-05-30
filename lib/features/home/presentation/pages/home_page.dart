@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:ecommerce_app/shared/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,14 +15,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeBloc(
-        productRepository: ProductRepositoryImpl(
-          apiService: ProductApiServiceImpl(),
-        ),
-      )..add(const HomeEvent.fetchProducts()),
-      child: const HomeView(),
-    );
+    return const HomeView();
   }
 }
 
@@ -43,8 +37,12 @@ class _HomeViewState extends State<HomeView> {
     // Monochrome theme configuration
     final backgroundColor = isDark ? const Color(0xFF121212) : Colors.white;
     final primaryTextColor = isDark ? Colors.white : const Color(0xFF111111);
-    final secondaryTextColor = isDark ? const Color(0xFF8E8E93) : const Color(0xFF6E6E73);
-    final borderColor = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE5E5EA);
+    final secondaryTextColor = isDark
+        ? const Color(0xFF8E8E93)
+        : const Color(0xFF6E6E73);
+    final borderColor = isDark
+        ? const Color(0xFF2C2C2E)
+        : const Color(0xFFE5E5EA);
 
     final buttonBgColor = isDark ? Colors.white : const Color(0xFF111111);
     final buttonTextColor = isDark ? const Color(0xFF111111) : Colors.white;
@@ -66,15 +64,18 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: borderColor,
-            height: 1,
-          ),
+          child: Container(color: borderColor, height: 1),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.shopping_bag_outlined, color: primaryTextColor, size: 20),
-            onPressed: () {},
+            icon: Icon(
+              Icons.favorite_border,
+              color: primaryTextColor,
+              size: 20,
+            ),
+            onPressed: () {
+              context.push(RouteNames.favorites);
+            },
           ),
         ],
       ),
@@ -85,16 +86,24 @@ class _HomeViewState extends State<HomeView> {
             return Column(
               children: [
                 // Shimmer for Category Selector
-                _buildCategoryShimmer(baseColor: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7)),
+                _buildCategoryShimmer(
+                  baseColor: isDark
+                      ? const Color(0xFF1C1C1E)
+                      : const Color(0xFFF2F2F7),
+                ),
                 Expanded(
                   child: GridView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 24,
-                      crossAxisSpacing: 16,
-                      childAspectRatio: 0.55,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
                     ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 24,
+                          crossAxisSpacing: 16,
+                          childAspectRatio: 0.55,
+                        ),
                     itemCount: 6,
                     itemBuilder: (context, index) => const ProductShimmer(),
                   ),
@@ -113,12 +122,15 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   Icon(
                     Icons.error_outline,
-                    color: isDark ? const Color(0xFFDC2626) : const Color(0xFFEF4444),
+                    color: isDark
+                        ? const Color(0xFFDC2626)
+                        : const Color(0xFFEF4444),
                     size: 32,
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    state.errorMessage ?? 'An error occurred while loading products.',
+                    state.errorMessage ??
+                        'An error occurred while loading products.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: secondaryTextColor,
@@ -133,7 +145,9 @@ class _HomeViewState extends State<HomeView> {
                       width: 140,
                       child: ElevatedButton(
                         onPressed: () {
-                          context.read<HomeBloc>().add(const HomeEvent.fetchProducts());
+                          context.read<HomeBloc>().add(
+                            const HomeEvent.fetchProducts(),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: buttonBgColor,
@@ -173,13 +187,15 @@ class _HomeViewState extends State<HomeView> {
           // Extract unique categories from products list dynamically
           final categories = [
             'ALL',
-            ...products.map((p) => p.category.toUpperCase()).toSet().toList()
+            ...products.map((p) => p.category.toUpperCase()).toSet(),
           ];
 
           // Filter product list locally based on selected category
           final filteredProducts = _selectedCategory == 'ALL'
               ? products
-              : products.where((p) => p.category.toUpperCase() == _selectedCategory).toList();
+              : products
+                    .where((p) => p.category.toUpperCase() == _selectedCategory)
+                    .toList();
 
           return Column(
             children: [
@@ -187,7 +203,9 @@ class _HomeViewState extends State<HomeView> {
               Container(
                 height: 50,
                 decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: borderColor, width: 0.5)),
+                  border: Border(
+                    bottom: BorderSide(color: borderColor, width: 0.5),
+                  ),
                 ),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -213,9 +231,13 @@ class _HomeViewState extends State<HomeView> {
                               cat,
                               style: TextStyle(
                                 fontSize: 10.5,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w500,
                                 letterSpacing: 1.5,
-                                color: isSelected ? primaryTextColor : secondaryTextColor,
+                                color: isSelected
+                                    ? primaryTextColor
+                                    : secondaryTextColor,
                               ),
                             ),
                             if (isSelected) ...[
@@ -240,23 +262,46 @@ class _HomeViewState extends State<HomeView> {
                   color: primaryTextColor,
                   backgroundColor: backgroundColor,
                   onRefresh: () async {
-                    context.read<HomeBloc>().add(const HomeEvent.fetchProducts());
+                    context.read<HomeBloc>().add(
+                      const HomeEvent.fetchProducts(),
+                    );
                   },
-                  child: GridView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 24,
-                      crossAxisSpacing: 16,
-                      childAspectRatio: 0.55,
-                    ),
-                    itemCount: filteredProducts.length,
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      return ProductItemCard(
-                        product: product,
-                        onTap: () {
-                          context.push(RouteNames.productDetails, extra: product);
+                  child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                    builder: (context, favoritesState) {
+                      return GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 24,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 24,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 0.55,
+                            ),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = filteredProducts[index];
+                          final isFavorite = favoritesState.favoriteIds
+                              .contains(product.id);
+                          return ProductItemCard(
+                            product: product,
+                            isFavorite: isFavorite,
+                            onFavoriteTap: () {
+                              context.read<FavoritesBloc>().add(
+                                FavoritesEvent.toggleFavorite(
+                                  productId: product.id,
+                                ),
+                              );
+                            },
+                            onTap: () {
+                              context.push(
+                                RouteNames.productDetails,
+                                extra: product,
+                              );
+                            },
+                          );
                         },
                       );
                     },

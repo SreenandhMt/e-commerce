@@ -34,4 +34,18 @@ class HiveService {
   static Future<void> clearCache() async {
     await _cacheBox.delete(HiveKeys.productsCache);
   }
+
+  // Save the list of favorite product IDs
+  static Future<void> saveFavoriteIds(List<int> ids) async {
+    await _cacheBox.put(HiveKeys.favorites, ids);
+  }
+
+  // Retrieve cached favorite product IDs
+  static List<int> getFavoriteIds() {
+    final ids = _cacheBox.get(HiveKeys.favorites);
+    if (ids is List) {
+      return ids.cast<int>();
+    }
+    return [];
+  }
 }

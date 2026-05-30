@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/features/auth/presentation/pages/login_page.dart';
+import 'package:ecommerce_app/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:ecommerce_app/features/home/data/models/product_model.dart';
 import 'package:ecommerce_app/features/home/presentation/pages/home_page.dart';
 import 'package:ecommerce_app/features/home/presentation/pages/product_details_page.dart';
@@ -32,6 +33,11 @@ class AppRouter {
           final product = state.extra as ProductModel;
           return ProductDetailsPage(product: product);
         },
+      ),
+      GoRoute(
+        path: RouteNames.favorites,
+        name: 'Favorites',
+        builder: (context, state) => const FavoritesPage(),
       ),
     ],
   );

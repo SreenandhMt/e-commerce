@@ -1,4 +1,6 @@
+import 'package:ecommerce_app/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/product_model.dart';
 
 class ProductDetailsPage extends StatelessWidget {
@@ -44,9 +46,15 @@ class ProductDetailsPage extends StatelessWidget {
     // Monochrome theme configuration
     final backgroundColor = isDark ? const Color(0xFF121212) : Colors.white;
     final primaryTextColor = isDark ? Colors.white : const Color(0xFF111111);
-    final secondaryTextColor = isDark ? const Color(0xFF8E8E93) : const Color(0xFF6E6E73);
-    final borderColor = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE5E5EA);
-    final imgBgColor = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF7F7F7);
+    final secondaryTextColor = isDark
+        ? const Color(0xFF8E8E93)
+        : const Color(0xFF6E6E73);
+    final borderColor = isDark
+        ? const Color(0xFF2C2C2E)
+        : const Color(0xFFE5E5EA);
+    final imgBgColor = isDark
+        ? const Color(0xFF1A1A1A)
+        : const Color(0xFFF7F7F7);
 
     final buttonBgColor = isDark ? Colors.white : const Color(0xFF111111);
     final buttonTextColor = isDark ? const Color(0xFF111111) : Colors.white;
@@ -72,12 +80,30 @@ class ProductDetailsPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: [
+          BlocBuilder<FavoritesBloc, FavoritesState>(
+            builder: (context, state) {
+              final isFavorite = state.favoriteIds.contains(product.id);
+              return IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite
+                      ? (isDark ? Colors.white : const Color(0xFF111111))
+                      : primaryTextColor,
+                  size: 20,
+                ),
+                onPressed: () {
+                  context.read<FavoritesBloc>().add(
+                    FavoritesEvent.toggleFavorite(productId: product.id),
+                  );
+                },
+              );
+            },
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: borderColor,
-            height: 1,
-          ),
+          child: Container(color: borderColor, height: 1),
         ),
       ),
       body: SingleChildScrollView(
@@ -90,12 +116,21 @@ class ProductDetailsPage extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: imgBgColor,
-                  border: Border(bottom: BorderSide(color: borderColor, width: 0.5)),
+                  border: Border(
+                    bottom: BorderSide(color: borderColor, width: 0.5),
+                  ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32.0,
+                  vertical: 24.0,
+                ),
                 child: Image.network(
                   product.image,
+                  key: ValueKey(product.image), // Stable key prevents reloading flicker on rebuild
                   fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
+                  cacheWidth: 600, // Decodes at target width for high density displays
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
                     return Center(
@@ -122,7 +157,10 @@ class ProductDetailsPage extends StatelessWidget {
 
             // 2. Product Details Content Block
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 32.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

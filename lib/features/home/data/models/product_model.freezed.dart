@@ -23,7 +23,6 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
 mixin _$ProductModel {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: _doubleFromNum)
   double get price => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
@@ -50,7 +49,7 @@ abstract class $ProductModelCopyWith<$Res> {
   $Res call({
     int id,
     String title,
-    @JsonKey(fromJson: _doubleFromNum) double price,
+    double price,
     String description,
     String category,
     String image,
@@ -141,7 +140,7 @@ abstract class _$$ProductModelImplCopyWith<$Res>
   $Res call({
     int id,
     String title,
-    @JsonKey(fromJson: _doubleFromNum) double price,
+    double price,
     String description,
     String category,
     String image,
@@ -215,7 +214,7 @@ class _$ProductModelImpl implements _ProductModel {
   const _$ProductModelImpl({
     required this.id,
     required this.title,
-    @JsonKey(fromJson: _doubleFromNum) required this.price,
+    required this.price,
     required this.description,
     required this.category,
     required this.image,
@@ -230,7 +229,6 @@ class _$ProductModelImpl implements _ProductModel {
   @override
   final String title;
   @override
-  @JsonKey(fromJson: _doubleFromNum)
   final double price;
   @override
   final String description;
@@ -293,7 +291,7 @@ abstract class _ProductModel implements ProductModel {
   const factory _ProductModel({
     required final int id,
     required final String title,
-    @JsonKey(fromJson: _doubleFromNum) required final double price,
+    required final double price,
     required final String description,
     required final String category,
     required final String image,
@@ -308,7 +306,6 @@ abstract class _ProductModel implements ProductModel {
   @override
   String get title;
   @override
-  @JsonKey(fromJson: _doubleFromNum)
   double get price;
   @override
   String get description;
@@ -333,7 +330,6 @@ RatingModel _$RatingModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RatingModel {
-  @JsonKey(fromJson: _doubleFromNum)
   double get rate => throw _privateConstructorUsedError;
   int get count => throw _privateConstructorUsedError;
 
@@ -354,7 +350,7 @@ abstract class $RatingModelCopyWith<$Res> {
     $Res Function(RatingModel) then,
   ) = _$RatingModelCopyWithImpl<$Res, RatingModel>;
   @useResult
-  $Res call({@JsonKey(fromJson: _doubleFromNum) double rate, int count});
+  $Res call({double rate, int count});
 }
 
 /// @nodoc
@@ -397,7 +393,7 @@ abstract class _$$RatingModelImplCopyWith<$Res>
   ) = __$$RatingModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(fromJson: _doubleFromNum) double rate, int count});
+  $Res call({double rate, int count});
 }
 
 /// @nodoc
@@ -432,16 +428,12 @@ class __$$RatingModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$RatingModelImpl implements _RatingModel {
-  const _$RatingModelImpl({
-    @JsonKey(fromJson: _doubleFromNum) required this.rate,
-    required this.count,
-  });
+  const _$RatingModelImpl({required this.rate, required this.count});
 
   factory _$RatingModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RatingModelImplFromJson(json);
 
   @override
-  @JsonKey(fromJson: _doubleFromNum)
   final double rate;
   @override
   final int count;
@@ -480,7 +472,7 @@ class _$RatingModelImpl implements _RatingModel {
 
 abstract class _RatingModel implements RatingModel {
   const factory _RatingModel({
-    @JsonKey(fromJson: _doubleFromNum) required final double rate,
+    required final double rate,
     required final int count,
   }) = _$RatingModelImpl;
 
@@ -488,7 +480,6 @@ abstract class _RatingModel implements RatingModel {
       _$RatingModelImpl.fromJson;
 
   @override
-  @JsonKey(fromJson: _doubleFromNum)
   double get rate;
   @override
   int get count;

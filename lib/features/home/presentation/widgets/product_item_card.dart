@@ -3,11 +3,15 @@ import '../../data/models/product_model.dart';
 
 class ProductItemCard extends StatelessWidget {
   final ProductModel product;
+  final bool isFavorite;
+  final VoidCallback? onFavoriteTap;
   final VoidCallback? onTap;
 
   const ProductItemCard({
     super.key,
     required this.product,
+    this.isFavorite = false,
+    this.onFavoriteTap,
     this.onTap,
   });
 
@@ -31,39 +35,66 @@ class ProductItemCard extends StatelessWidget {
           // Elegant Image Wrapper
           AspectRatio(
             aspectRatio: 1.0,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: imgBgColor,
-                borderRadius: BorderRadius.zero, // Sharp luxury edges
-                border: Border.all(color: borderColor, width: 0.5),
-              ),
-              padding: const EdgeInsets.all(24.0),
-              child: Image.network(
-                product.image,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  // Return a pulsing monochrome shimmer while loading
-                  return const _ImageLoadingShimmer();
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.image_not_supported_outlined,
-                    color: secondaryTextColor,
-                    size: 20,
-                  );
-                },
-              ),
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: imgBgColor,
+                    borderRadius: BorderRadius.zero, // Sharp luxury edges
+                    border: Border.all(color: borderColor, width: 0.5),
+                  ),
+                  padding: const EdgeInsets.all(16.0), // Reduced from 24.0 for a larger, clearer image
+                  child: Image.network(
+                    product.image,
+                    key: ValueKey(product.image), // Stable key prevents reloading flicker on rebuild
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: double.infinity,
+                    cacheWidth: 300, // Decodes at target width for instant loading and low memory usage
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      // Return a pulsing monochrome shimmer while loading
+                      return const _ImageLoadingShimmer();
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.image_not_supported_outlined,
+                        color: secondaryTextColor,
+                        size: 20,
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: onFavoriteTap,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      color: Colors.transparent,
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        size: 18,
+                        color: isFavorite
+                            ? (isDark ? Colors.white : const Color(0xFF111111))
+                            : secondaryTextColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           // Category tag (Muted, letter-spaced)
           Text(
             product.category.toUpperCase(),
             style: TextStyle(
-              fontSize: 9,
+              fontSize: 8.5,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0,
               color: secondaryTextColor,
@@ -71,27 +102,27 @@ class ProductItemCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 3),
 
           // Title
           Text(
             product.title,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12.5,
               fontWeight: FontWeight.w400,
               color: primaryTextColor,
-              height: 1.3,
+              height: 1.25,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
 
           // Price tag
           Text(
             '\$${product.price.toStringAsFixed(2)}',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12.5,
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
               color: primaryTextColor,
