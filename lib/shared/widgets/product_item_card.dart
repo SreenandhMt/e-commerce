@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/models/product_model.dart';
+import 'package:ecommerce_app/core/theme/app_colors.dart';
+import 'package:ecommerce_app/features/home/data/models/product_model.dart';
 
 class ProductItemCard extends StatelessWidget {
   final ProductModel product;
@@ -20,10 +21,10 @@ class ProductItemCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final primaryTextColor = isDark ? Colors.white : const Color(0xFF111111);
-    final secondaryTextColor = isDark ? const Color(0xFF8E8E93) : const Color(0xFF6E6E73);
-    final imgBgColor = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF7F7F7);
-    final borderColor = isDark ? const Color(0xFF262626) : const Color(0xFFE5E5E5);
+    final primaryTextColor = isDark ? Colors.white : AppColors.textPrimaryLight;
+    final secondaryTextColor = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+    final imgBgColor = isDark ? AppColors.imageBgDark : AppColors.imageBgLight;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.borderLight;
 
     return InkWell(
       onTap: onTap,

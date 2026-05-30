@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../data/repositories/product_repository.dart';
-import '../../data/services/product_api_service.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/theme_cubit.dart';
 import '../bloc/home_bloc.dart';
-import '../widgets/product_item_card.dart';
-import '../widgets/product_shimmer.dart';
+import 'package:ecommerce_app/shared/widgets/product_item_card.dart';
+import 'package:ecommerce_app/shared/widgets/product_shimmer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -34,18 +34,16 @@ class _HomeViewState extends State<HomeView> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Monochrome theme configuration
-    final backgroundColor = isDark ? const Color(0xFF121212) : Colors.white;
-    final primaryTextColor = isDark ? Colors.white : const Color(0xFF111111);
+    // Monochrome theme configuration linked to AppColors
+    final backgroundColor = theme.scaffoldBackgroundColor;
+    final primaryTextColor = isDark ? Colors.white : AppColors.textPrimaryLight;
     final secondaryTextColor = isDark
-        ? const Color(0xFF8E8E93)
-        : const Color(0xFF6E6E73);
-    final borderColor = isDark
-        ? const Color(0xFF2C2C2E)
-        : const Color(0xFFE5E5EA);
+        ? AppColors.textSecondaryDark
+        : AppColors.textSecondaryLight;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.borderLight;
 
-    final buttonBgColor = isDark ? Colors.white : const Color(0xFF111111);
-    final buttonTextColor = isDark ? const Color(0xFF111111) : Colors.white;
+    final buttonBgColor = isDark ? Colors.white : AppColors.primaryLight;
+    final buttonTextColor = isDark ? AppColors.primaryLight : Colors.white;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -67,6 +65,18 @@ class _HomeViewState extends State<HomeView> {
           child: Container(color: borderColor, height: 1),
         ),
         actions: [
+          IconButton(
+            icon: Icon(
+              theme.brightness == Brightness.dark
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined,
+              color: primaryTextColor,
+              size: 20,
+            ),
+            onPressed: () {
+              context.read<ThemeCubit>().toggleTheme(context);
+            },
+          ),
           IconButton(
             icon: Icon(
               Icons.favorite_border,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../bloc/favorites_bloc.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/routes/route_names.dart';
 
 class FavoritesPage extends StatelessWidget {
@@ -13,14 +14,14 @@ class FavoritesPage extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final backgroundColor = isDark ? const Color(0xFF121212) : Colors.white;
-    final primaryTextColor = isDark ? Colors.white : const Color(0xFF111111);
-    final secondaryTextColor = isDark ? const Color(0xFF8E8E93) : const Color(0xFF6E6E73);
-    final borderColor = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE5E5EA);
-    final imgBgColor = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF7F7F7);
+    final backgroundColor = theme.scaffoldBackgroundColor;
+    final primaryTextColor = isDark ? Colors.white : AppColors.textPrimaryLight;
+    final secondaryTextColor = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.borderLight;
+    final imgBgColor = isDark ? AppColors.imageBgDark : AppColors.imageBgLight;
 
-    final buttonBgColor = isDark ? Colors.white : const Color(0xFF111111);
-    final buttonTextColor = isDark ? const Color(0xFF111111) : Colors.white;
+    final buttonBgColor = isDark ? Colors.white : AppColors.primaryLight;
+    final buttonTextColor = isDark ? AppColors.primaryLight : Colors.white;
 
     return Scaffold(
       backgroundColor: backgroundColor,

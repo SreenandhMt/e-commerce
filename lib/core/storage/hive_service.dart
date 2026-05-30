@@ -48,4 +48,14 @@ class HiveService {
     }
     return [];
   }
+
+  // Save the theme mode index
+  static Future<void> saveThemeMode(int index) async {
+    await _cacheBox.put(HiveKeys.themeMode, index);
+  }
+
+  // Retrieve cached theme mode index
+  static int getThemeModeIndex() {
+    return _cacheBox.get(HiveKeys.themeMode) as int? ?? 0; // 0 matches ThemeMode.system.index
+  }
 }
