@@ -1,5 +1,7 @@
+import 'package:ecommerce_app/shared/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../data/repositories/product_repository.dart';
 import '../../data/services/product_api_service.dart';
@@ -250,7 +252,13 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
-                      return ProductItemCard(product: filteredProducts[index]);
+                      final product = filteredProducts[index];
+                      return ProductItemCard(
+                        product: product,
+                        onTap: () {
+                          context.push(RouteNames.productDetails, extra: product);
+                        },
+                      );
                     },
                   ),
                 ),
